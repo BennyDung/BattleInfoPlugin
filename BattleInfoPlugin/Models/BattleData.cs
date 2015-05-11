@@ -176,6 +176,23 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
+        #region RankPrediction Change Notify
+        private BattleRank _RankPrediction = BattleRank.SS;
+
+        public BattleRank RankPrediction
+        {
+            get
+            { return this._RankPrediction; }
+            set
+            {
+                if (this._RankPrediction == value)
+                    return;
+                this._RankPrediction = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         private int CurrentDeckId { get; set; }
 
         private readonly EnemyDataProvider provider = new EnemyDataProvider();
@@ -535,11 +552,55 @@ namespace BattleInfoPlugin.Models
 
         private void UpdateNowHP(int[] api_nowhps, int[] api_nowhps_combined = null)
         {
+            var HPbefore = this.FirstFleet.Sum(ship => ship.NowHP);
             this.FirstFleet.SetValues(api_nowhps.GetFriendData(), (s, v) => s.NowHP = v);
-            this.Enemies.SetValues(api_nowhps.GetEnemyData(), (s, v) => s.NowHP = v);
+            var HPafter = this.FirstFleet.Sum(ship => ship.NowHP);
+            var HPtotal = this.FirstFleet.Sum(ship => ship.MaxHP);
 
-            if (api_nowhps_combined == null) return;
-            this.SecondFleet.SetValues(api_nowhps_combined.GetFriendData(), (s, v) => s.NowHP = v);
+            var EHPbefore = this.Enemies.Sum(ship => ship.NowHP);
+            this.Enemies.SetValues(api_nowhps.GetEnemyData(), (s, v) => s.NowHP = v);
+            var EHPafter = this.Enemies.Sum(ship => ship.NowHP);
+            var EHPtotal = this.Enemies.Sum(ship => ship.MaxHP);
+
+
+            if (api_nowhps_combined != null)
+            {
+                HPbefore += this.SecondFleet.Sum(ship => ship.NowHP);
+                this.SecondFleet.SetValues(api_nowhps_combined.GetFriendData(), (s, v) => s.NowHP = v);
+                HPafter += this.SecondFleet.Sum(ship => ship.NowHP);
+                HPtotal += this.SecondFleet.Sum(ship => ship.MaxHP);
+            }
+            
+            var HPlose = (decimal)(HPbefore - HPafter) / HPtotal;
+            var EHPlose = (decimal)(EHPbefore - EHPafter) / EHPtotal;
+
+            if (this.Enemies.All(ship => ship.NowHP <= 0))
+            {
+                if (HPlose != 0m)
+                    this.RankPrediction = BattleRank.S;
+                else
+                    this.RankPrediction = BattleRank.SS;
+            }
+            else if (this.Enemies.Count(ship => ship.NowHP <= 0) > (this.Enemies.Length - (this.Enemies.Length <= 4 ? 1 : 0)) / 2)
+            {
+                this.RankPrediction = BattleRank.A;
+            }
+            else if (this.Enemies[0].NowHP <= 0)
+            {
+                this.RankPrediction = BattleRank.B;
+            }
+            else if (EHPlose > 2.5m * HPlose)
+            {
+                this.RankPrediction = BattleRank.B;
+            }
+            else if (EHPlose <= 0.05m)
+            {
+                this.RankPrediction = BattleRank.D;
+            }
+            else
+            {
+                this.RankPrediction = BattleRank.C;
+            }
         }
     }
 

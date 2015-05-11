@@ -76,6 +76,10 @@
                         <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                        <Run Text=" 推定评级"/>
+                        <Run Text="{Binding Data.RankPrediction, Mode=OneWay}"
+                             FontSize="12"
+                             Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                     </TextBlock>
                 </Grid>
             </Border>
