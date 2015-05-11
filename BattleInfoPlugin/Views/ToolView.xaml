@@ -24,11 +24,12 @@
          ViewPortサイズからMargin削った分をサイズに設定する必要がある -->
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
-                  PanningMode="Both"
-                  Width="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
+                  PanningMode="Both">
+                  <!--Width="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
                                   Path=ViewportWidth, Converter={StaticResource WidthConverter}}"
                   Height="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
-                                   Path=ViewportHeight, Converter={StaticResource HeightConverter}}">
+                                   Path=ViewportHeight, Converter={StaticResource HeightConverter}}"
+                  >-->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
