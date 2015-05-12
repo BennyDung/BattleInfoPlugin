@@ -76,8 +76,7 @@
                         <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                        <Run Text=" 推定评级"/>
-                        <Run Text="{Binding Data.RankPrediction, Mode=OneWay}"
+                        <Run Text="{Binding Data.RankPrediction, Mode=OneWay, StringFormat=' 推定评级:\{0\}', TargetNullValue=''}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                     </TextBlock>

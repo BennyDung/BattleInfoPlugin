@@ -177,9 +177,9 @@ namespace BattleInfoPlugin.Models
         #endregion
 
         #region RankPrediction Change Notify
-        private BattleRank _RankPrediction = BattleRank.SS;
+        private BattleRank? _RankPrediction = null;
 
-        public BattleRank RankPrediction
+        public BattleRank? RankPrediction
         {
             get
             { return this._RankPrediction; }
@@ -251,9 +251,13 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
+            this.PreUpdateBattleRank();
+
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+
+            this.UpdateBattleRank();
         }
 
         public void Update(battle_midnight_sp_midnight data)
@@ -264,9 +268,13 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
+            this.PreUpdateBattleRank();
+
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+
+            this.UpdateBattleRank();
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
         }
@@ -278,6 +286,8 @@ namespace BattleInfoPlugin.Models
             this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot);
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+
+            this.PreUpdateBattleRank(true);
 
             this.FirstFleet.CalcDamages(
                 data.api_kouku.GetFirstFleetDamages(),
@@ -295,6 +305,8 @@ namespace BattleInfoPlugin.Models
                 data.api_kouku2.GetEnemyDamages()
                 );
 
+            this.UpdateBattleRank(true);
+
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); //航空戦2回目はスルー
         }
 
@@ -305,6 +317,8 @@ namespace BattleInfoPlugin.Models
             this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot);
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+
+            this.PreUpdateBattleRank(true);
 
             this.FirstFleet.CalcDamages(
                 data.api_kouku.GetFirstFleetDamages(),
@@ -329,6 +343,8 @@ namespace BattleInfoPlugin.Models
                 data.api_hougeki3.GetEnemyDamages()
                 );
 
+            this.UpdateBattleRank(true);
+
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
         }
 
@@ -339,6 +355,8 @@ namespace BattleInfoPlugin.Models
             this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot);
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+
+            this.PreUpdateBattleRank(true);
 
             this.FirstFleet.CalcDamages(
                 data.api_kouku.GetFirstFleetDamages(),
@@ -363,6 +381,8 @@ namespace BattleInfoPlugin.Models
                 data.api_raigeki.GetEnemyDamages()
                 );
 
+            this.UpdateBattleRank(true);
+
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
         }
 
@@ -374,9 +394,13 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
+            this.PreUpdateBattleRank(true);
+
             this.SecondFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+
+            this.UpdateBattleRank(true);
         }
 
         public void Update(combined_battle_sp_midnight data)
@@ -387,9 +411,13 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
+            this.PreUpdateBattleRank(true);
+
             this.SecondFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+
+            this.UpdateBattleRank(true);
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
         }
@@ -401,6 +429,8 @@ namespace BattleInfoPlugin.Models
             this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, null, false);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
+
+            this.PreUpdateBattleRank();
 
             this.FirstFleet.CalcDamages(
                 data.api_kouku.GetFirstFleetDamages(),
@@ -418,6 +448,8 @@ namespace BattleInfoPlugin.Models
                 data.api_raigeki.GetEnemyDamages()
                 );
 
+            this.UpdateBattleRank();
+
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
         }
 
@@ -429,9 +461,13 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
+            this.PreUpdateBattleRank();
+
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+
+            this.UpdateBattleRank();
         }
 
         private void Update(sortie_airbattle data)
@@ -441,6 +477,8 @@ namespace BattleInfoPlugin.Models
             this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, data.api_eSlot);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
+
+            this.PreUpdateBattleRank();
 
             this.FirstFleet.CalcDamages(
                 data.api_kouku.GetFirstFleetDamages(),
@@ -453,6 +491,8 @@ namespace BattleInfoPlugin.Models
                 data.api_kouku2.GetEnemyDamages()
                 );
 
+            this.UpdateBattleRank();
+
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); // 航空戦2回目はスルー
         }
 
@@ -463,6 +503,8 @@ namespace BattleInfoPlugin.Models
             this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, data.api_eSlot);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
+
+            this.PreUpdateBattleRank();
 
             this.FirstFleet.CalcDamages(
                 data.api_kouku.GetFirstFleetDamages(),
@@ -480,6 +522,8 @@ namespace BattleInfoPlugin.Models
                 data.api_hougeki2.GetEnemyDamages(),
                 data.api_raigeki.GetEnemyDamages()
                 );
+
+            this.UpdateBattleRank();
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
         }
@@ -506,6 +550,8 @@ namespace BattleInfoPlugin.Models
             this.UpdateFriendFleets(this.CurrentDeckId);
             this.FirstFleet.UpdateHPBySource();
             this.SecondFleet.UpdateHPBySource();
+
+            this.ClearBattleRank();
         }
 
         private void UpdateFleets(
@@ -552,31 +598,52 @@ namespace BattleInfoPlugin.Models
 
         private void UpdateNowHP(int[] api_nowhps, int[] api_nowhps_combined = null)
         {
-            var HPbefore = this.FirstFleet.Sum(ship => ship.NowHP);
             this.FirstFleet.SetValues(api_nowhps.GetFriendData(), (s, v) => s.NowHP = v);
-            var HPafter = this.FirstFleet.Sum(ship => ship.NowHP);
-            var HPtotal = this.FirstFleet.Sum(ship => ship.MaxHP);
 
-            var EHPbefore = this.Enemies.Sum(ship => ship.NowHP);
             this.Enemies.SetValues(api_nowhps.GetEnemyData(), (s, v) => s.NowHP = v);
-            var EHPafter = this.Enemies.Sum(ship => ship.NowHP);
-            var EHPtotal = this.Enemies.Sum(ship => ship.MaxHP);
 
 
             if (api_nowhps_combined != null)
             {
-                HPbefore += this.SecondFleet.Sum(ship => ship.NowHP);
                 this.SecondFleet.SetValues(api_nowhps_combined.GetFriendData(), (s, v) => s.NowHP = v);
-                HPafter += this.SecondFleet.Sum(ship => ship.NowHP);
-                HPtotal += this.SecondFleet.Sum(ship => ship.MaxHP);
             }
-            
-            var HPlose = (decimal)(HPbefore - HPafter) / HPtotal;
-            var EHPlose = (decimal)(EHPbefore - EHPafter) / EHPtotal;
+        }
 
+        int? hp_sum = null;
+        int? enemy_hp_sum = null;
+
+        private void PreUpdateBattleRank(bool combined = false)
+        {
+            if (!hp_sum.HasValue)
+            {
+                hp_sum = this.FirstFleet.Sum(ship => ship.NowHP);
+                if (combined)
+                {
+                    hp_sum += this.SecondFleet.Sum(ship => ship.NowHP);
+                }
+                enemy_hp_sum = this.Enemies.Sum(ship => ship.NowHP);
+            }
+        }
+
+        private void UpdateBattleRank(bool combined = false)
+        {
+            int HPnow = this.FirstFleet.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
+            double HPsum = hp_sum ?? this.FirstFleet.Sum(ship => ship.MaxHP);
+            int EHPnow = this.Enemies.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
+            double EHPsum = enemy_hp_sum ?? this.Enemies.Sum(ship => ship.MaxHP);
+            if (combined)
+            {
+                HPnow += this.SecondFleet.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
+                if (!hp_sum.HasValue)
+                {
+                    HPsum += this.SecondFleet.Sum(ship => ship.MaxHP);
+                }
+            }
+            double HPlose = (HPsum - HPnow) / HPsum;
+            double EHPlose = (EHPsum - EHPnow) / EHPsum;
             if (this.Enemies.All(ship => ship.NowHP <= 0))
             {
-                if (HPlose != 0m)
+                if (HPlose != 0)
                     this.RankPrediction = BattleRank.S;
                 else
                     this.RankPrediction = BattleRank.SS;
@@ -589,11 +656,11 @@ namespace BattleInfoPlugin.Models
             {
                 this.RankPrediction = BattleRank.B;
             }
-            else if (EHPlose > 2.5m * HPlose)
+            else if (EHPlose > 2.5 * HPlose)
             {
                 this.RankPrediction = BattleRank.B;
             }
-            else if (EHPlose <= 0.05m)
+            else if (EHPlose <= 0.05)
             {
                 this.RankPrediction = BattleRank.D;
             }
@@ -601,6 +668,13 @@ namespace BattleInfoPlugin.Models
             {
                 this.RankPrediction = BattleRank.C;
             }
+        }
+
+        private void ClearBattleRank()
+        {
+            hp_sum = null;
+            enemy_hp_sum = null;
+            this.RankPrediction = null;
         }
     }
 
