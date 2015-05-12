@@ -97,7 +97,7 @@
 
             <CheckBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4"
                       HorizontalAlignment="Right"
-                      Content="戦闘終了通知"
+                      Content="战斗结束通知"
                       IsChecked="{Binding IsNotifierEnabled}"
                       Margin="10, 0"/>
         </Grid>
