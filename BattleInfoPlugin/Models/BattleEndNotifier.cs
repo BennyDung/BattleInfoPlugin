@@ -49,8 +49,8 @@ namespace BattleInfoPlugin.Models
             if (this.IsEnabled && !isActive)
                 PluginHost.Instance.GetNotifier().Show(
                     NotifyType.Other,
-                    "戦闘終了",
-                    "戦闘が終了しました。",
+                    "战斗结束",
+                    "战斗结束了poi~",
                     () => App.ViewModelRoot.Activate());
         }
     }
