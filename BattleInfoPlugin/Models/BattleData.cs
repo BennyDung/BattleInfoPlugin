@@ -598,43 +598,46 @@ namespace BattleInfoPlugin.Models
         {
             if (!hp_sum.HasValue)
             {
-                hp_sum = this.FirstFleet.Sum(ship => ship.NowHP);
+                hp_sum = this.FirstFleet.Ships.Sum(ship => ship.NowHP);
                 if (combined)
                 {
-                    hp_sum += this.SecondFleet.Sum(ship => ship.NowHP);
+                    hp_sum += this.SecondFleet.Ships.Sum(ship => ship.NowHP);
                 }
-                enemy_hp_sum = this.Enemies.Sum(ship => ship.NowHP);
+                enemy_hp_sum = this.Enemies.Ships.Sum(ship => ship.NowHP);
             }
         }
 
         private void UpdateBattleRank(bool combined = false)
         {
-            int HPnow = this.FirstFleet.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
-            double HPsum = hp_sum ?? this.FirstFleet.Sum(ship => ship.MaxHP);
-            int EHPnow = this.Enemies.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
-            double EHPsum = enemy_hp_sum ?? this.Enemies.Sum(ship => ship.MaxHP);
+            int HPnow = this.FirstFleet.Ships.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
+            double HPsum = hp_sum ?? this.FirstFleet.Ships.Sum(ship => ship.MaxHP);
+            int EHPnow = this.Enemies.Ships.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
+            double EHPsum = enemy_hp_sum ?? this.Enemies.Ships.Sum(ship => ship.MaxHP);
             if (combined)
             {
-                HPnow += this.SecondFleet.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
+                HPnow += this.SecondFleet.Ships.Sum(ship => ship.NowHP < 0 ? 0 : ship.NowHP);
                 if (!hp_sum.HasValue)
                 {
-                    HPsum += this.SecondFleet.Sum(ship => ship.MaxHP);
+                    HPsum += this.SecondFleet.Ships.Sum(ship => ship.MaxHP);
                 }
             }
             double HPlose = (HPsum - HPnow) / HPsum;
             double EHPlose = (EHPsum - EHPnow) / EHPsum;
-            if (this.Enemies.All(ship => ship.NowHP <= 0))
+            int EShipCount = this.Enemies.Ships.Count();
+            int ESunkCount = this.Enemies.Ships.Count(ship => ship.NowHP <= 0);
+            ShipData EFlagShip = this.Enemies.Ships.First();
+            if (ESunkCount == EShipCount)
             {
                 if (HPlose != 0)
                     this.RankPrediction = BattleRank.S;
                 else
                     this.RankPrediction = BattleRank.SS;
             }
-            else if (this.Enemies.Count(ship => ship.NowHP <= 0) > (this.Enemies.Length - (this.Enemies.Length <= 4 ? 1 : 0)) / 2)
+            else if (ESunkCount > (EShipCount - (EShipCount <= 4 ? 1 : 0)) / 2)
             {
                 this.RankPrediction = BattleRank.A;
             }
-            else if (this.Enemies[0].NowHP <= 0)
+            else if (EFlagShip != null && EFlagShip.NowHP <= 0)
             {
                 this.RankPrediction = BattleRank.B;
             }
