@@ -90,7 +90,7 @@
                         <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                        <Run Text="{Binding Data.RankPrediction, Mode=OneWay, StringFormat=' 推定评级:\{0\}', TargetNullValue=''}"
+                        <Run Text="{Binding Data.RankPrediction, Mode=OneWay, TargetNullValue=''}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                     </TextBlock>
@@ -99,7 +99,7 @@
                     <Button Grid.Column="3"
                             Grid.Row="0"
                             Grid.RowSpan="2"
-                            Content="既知の敵一覧"
+                            Content="已知敌舰一览"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Right"
                             Margin="0,0,10,3">
