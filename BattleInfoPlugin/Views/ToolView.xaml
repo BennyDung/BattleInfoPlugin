@@ -90,6 +90,7 @@
                         <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                        <Run Text=" "/>
                         <Run Text="{Binding Data.RankPrediction, Mode=OneWay, TargetNullValue=''}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
