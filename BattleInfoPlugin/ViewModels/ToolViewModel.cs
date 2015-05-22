@@ -160,7 +160,7 @@ namespace BattleInfoPlugin.ViewModels
         {
             var message = new TransitionMessage("Show/EnemyWindow")
             {
-                TransitionViewModel = new EnemyWindowViewModel(this.Data.GetMapEnemies())
+                TransitionViewModel = new EnemyWindowViewModel(this.Data.GetMapEnemies(), this.Data.GetCellTypes())
             };
             this.Messenger.RaiseAsync(message);
         }

@@ -39,6 +39,10 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         #endregion
 
+        public CellType CellType { get; set; }
+
+        public int ColorNo { get; set; }
+
         public EnemyMapViewModel ParentMap { get; set; }
     }
 }

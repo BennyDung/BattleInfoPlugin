@@ -36,6 +36,10 @@ namespace BattleInfoPlugin.Models.Repositories
         [DataMember]
         private Dictionary<int, Dictionary<int, HashSet<int>>> MapEnemyData { get; set; }
 
+        // MapInfoID, CellNo, BattleApiClassName
+        [DataMember]
+        private Dictionary<int, Dictionary<int, string>> MapCellBattleTypes { get; set; }
+
         // MapInfoID, FromCellNo, ToCellNo
         [DataMember]
         private Dictionary<int, HashSet<KeyValuePair<int, int>>> MapRoute { get; set; }
@@ -44,9 +48,14 @@ namespace BattleInfoPlugin.Models.Repositories
         [DataMember]
         private Dictionary<int, string> EnemyNames { get; set; }
 
-        [NonSerialized] private int currentEnemyID;
+        [NonSerialized]
+        private int currentEnemyID;
 
-        [NonSerialized] private int previousCellNo;
+        [NonSerialized]
+        private int previousCellNo;
+
+        [NonSerialized]
+        private map_start_next currentStartNext;
 
         public EnemyDataProvider()
         {
@@ -56,8 +65,10 @@ namespace BattleInfoPlugin.Models.Repositories
             if (this.EnemySlotItems == null) this.EnemySlotItems = new Dictionary<int, int[][]>();
             if (this.EnemyNames == null) this.EnemyNames = new Dictionary<int, string>();
             if (this.MapEnemyData == null) this.MapEnemyData = new Dictionary<int, Dictionary<int, HashSet<int>>>();
+            if (this.MapCellBattleTypes == null) this.MapCellBattleTypes = new Dictionary<int, Dictionary<int, string>>();
             if (this.MapRoute == null) this.MapRoute = new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
             this.previousCellNo = 0;
+            this.currentStartNext = null;
             this.Dump("GetNextEnemyFormation");
         }
         
@@ -74,10 +85,26 @@ namespace BattleInfoPlugin.Models.Repositories
 
         public void UpdateMapData(map_start_next startNext)
         {
+            this.currentStartNext = startNext;
             this.UpdateMapEnemyData(startNext);
             this.UpdateMapRoute(startNext);
             this.Save();
             this.Dump("UpdateMapData");
+        }
+
+        public void UpdateBattleTypes<T>(T battleApi)
+        {
+            var battleTypeName = typeof(T).Name;
+            var mapInfo = GetMapInfo(this.currentStartNext);
+
+            if (!this.MapCellBattleTypes.ContainsKey(mapInfo))
+                this.MapCellBattleTypes.Add(mapInfo, new Dictionary<int, string>());
+            if (!this.MapCellBattleTypes[mapInfo].ContainsKey(this.currentStartNext.api_no))
+                this.MapCellBattleTypes[mapInfo].Add(this.currentStartNext.api_no, battleTypeName);
+            else
+                this.MapCellBattleTypes[mapInfo][this.currentStartNext.api_no] = battleTypeName;
+            
+            this.Save();
         }
 
         public void UpdateEnemyName(battle_result result)
@@ -92,30 +119,28 @@ namespace BattleInfoPlugin.Models.Repositories
             this.Save();
         }
 
-        public Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> GetMapEnemies()
+        public Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> GetMapEnemies()
         {
             this.Reload();
             return this.MapEnemyData.Where(info => Master.Current.MapInfos.ContainsKey(info.Key)).ToDictionary(
                 info => Master.Current.MapInfos[info.Key],
                 info => info.Value.ToDictionary(
-                    cell => cell.Key,
+                    cell => Master.Current.MapCells
+                        .Select(c => c.Value)
+                        .Single(c => c.MapInfoId == info.Key && c.IdInEachMapInfo == cell.Key),
                     cell => cell.Value.ToDictionary(
                         enemy => enemy,
                         enemy => new FleetData(
                             this.GetEnemiesFromId(enemy),
                             this.GetEnemyFormationFromId(enemy),
-                            this.GetEnemyNameFromId(enemy),
-                            IsBoss(info.Key, cell.Key)
+                            this.GetEnemyNameFromId(enemy)
                             ))));
         }
 
-        private static bool IsBoss(int mapInfoId, int cellNo)
+        public Dictionary<int, Dictionary<int, string>> GetMapCellBattleTypes()
         {
-            var cell = Master.Current.MapCells.Values
-                .Where(x => x.MapInfoId == mapInfoId)
-                .SingleOrDefault(x => x.IdInEachMapInfo == cellNo);
-            if (cell == null) return false;
-            return cell.ColorNo == 5;
+            this.Reload();
+            return this.MapCellBattleTypes;
         }
 
         private string GetNextEnemyName(map_start_next startNext)
@@ -249,12 +274,13 @@ namespace BattleInfoPlugin.Models.Repositories
             {
                 var obj = serializer.ReadObject(stream) as EnemyDataProvider;
                 if (obj == null) return;
-                this.EnemyDictionary = obj.EnemyDictionary;
-                this.EnemyFormation = obj.EnemyFormation;
-                this.EnemySlotItems = obj.EnemySlotItems;
-                this.EnemyNames = obj.EnemyNames;
-                this.MapEnemyData = obj.MapEnemyData;
-                this.MapRoute = obj.MapRoute;
+                this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<int, int[]>();
+                this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<int, Formation>();
+                this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<int, int[][]>();
+                this.EnemyNames = obj.EnemyNames ?? new Dictionary<int, string>();
+                this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<int>>>();
+                this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
+                this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
             }
         }
 
