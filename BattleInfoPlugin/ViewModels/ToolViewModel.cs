@@ -115,8 +115,6 @@ namespace BattleInfoPlugin.ViewModels
         #endregion
 
 
-        public ToolViewModel() : this(null, null) { }
-
         public ToolViewModel(BattleData data, BattleEndNotifier notifier)
         {
             this.FirstFleet = new FleetViewModel("自艦隊");
