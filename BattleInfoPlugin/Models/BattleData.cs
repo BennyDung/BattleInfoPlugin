@@ -425,6 +425,7 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
+            this.ClearBattleRank();
             this.PreUpdateBattleRank();
 
             this.FirstFleet.CalcDamages(
