@@ -254,6 +254,7 @@
     <PostBuildEvent>mkdir $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\Plugins
 mkdir $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\lib
 xcopy /Y $(TargetDir)*.* $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)
+del $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\$(TargetName).dll.config
 move $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\$(TargetName).* $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\Plugins
 mkdir $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\BattleInfoPluginData\kcs\resources\swf\map
 move $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\*.dll $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\lib</PostBuildEvent>
