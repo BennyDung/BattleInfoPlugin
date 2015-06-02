@@ -422,6 +422,7 @@ namespace BattleInfoPlugin.Models
             this.Name = "演習 - 昼戦";
 
             this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, null, false);
+            this.Enemies.Name = "";
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
