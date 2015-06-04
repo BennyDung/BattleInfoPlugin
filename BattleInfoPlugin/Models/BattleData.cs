@@ -244,7 +244,7 @@ namespace BattleInfoPlugin.Models
         {
             if (!cellData.ContainsKey(cell.MapInfoId)) return CellType.None;
             var datas = cellData[cell.MapInfoId];
-            var data = datas.SingleOrDefault(x => cell.IdInEachMapInfo == x.No);
+            var data = datas.FirstOrDefault(x => cell.IdInEachMapInfo == x.No);
             if (data == default(MapCellData)) return CellType.None;
             return data.EventId.ToCellType();
         }

@@ -96,7 +96,7 @@ namespace BattleInfoPlugin.Views.Behaviors
         {
             var cellNo = this.AssociatedObject.Text;
             return cellsGroupItems
-                .SingleOrDefault(x => ((EnemyCellViewModel)((CollectionViewGroup)x.DataContext).Name).Key.ToString() == cellNo);
+                .FirstOrDefault(x => ((EnemyCellViewModel)((CollectionViewGroup)x.DataContext).Name).Key.ToString() == cellNo);
         }
 
         void AssociatedObject_MouseEnter(object sender, MouseEventArgs e)
