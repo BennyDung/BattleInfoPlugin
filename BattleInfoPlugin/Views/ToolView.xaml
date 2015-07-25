@@ -36,11 +36,12 @@
          ViewPortサイズからMargin削った分をサイズに設定する必要がある -->
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
-                  PanningMode="Both"
-                  Width="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
+                  PanningMode="Both">
+                  <!--Width="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
                                   Path=ViewportWidth, Converter={StaticResource WidthConverter}}"
                   Height="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
-                                   Path=ViewportHeight, Converter={StaticResource HeightConverter}}">
+                                   Path=ViewportHeight, Converter={StaticResource HeightConverter}}"
+                  >-->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -89,13 +90,17 @@
                         <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding Data.RankPrediction, Mode=OneWay, TargetNullValue=''}"
+                             FontSize="12"
+                             Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                     </TextBlock>
 
 
                     <Button Grid.Column="3"
                             Grid.Row="0"
                             Grid.RowSpan="2"
-                            Content="既知の敵一覧"
+                            Content="已知敌舰一览"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Right"
                             Margin="0,0,10,3">
@@ -123,7 +128,7 @@
 
             <CheckBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4"
                       HorizontalAlignment="Right"
-                      Content="戦闘終了通知"
+                      Content="战斗结束通知"
                       IsChecked="{Binding IsNotifierEnabled}"
                       Margin="10, 0"/>
         </Grid>

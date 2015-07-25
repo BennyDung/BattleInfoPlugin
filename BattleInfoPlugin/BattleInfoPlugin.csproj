@@ -136,6 +136,7 @@
     <Compile Include="Models\FleetDamages.cs" />
     <Compile Include="Models\FleetData.cs" />
     <Compile Include="Models\Formation.cs" />
+    <Compile Include="Models\BattleRank.cs" />
     <Compile Include="Models\MapArea.cs" />
     <Compile Include="Models\MapCell.cs" />
     <Compile Include="Models\MapCellData.cs" />
@@ -258,8 +259,12 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>mkdir $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\Plugins
+mkdir $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\lib
 xcopy /Y $(TargetDir)*.* $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)
-move $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\$(TargetName).* $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\Plugins</PostBuildEvent>
+del $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\$(TargetName).dll.config
+move $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\$(TargetName).* $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\Plugins
+mkdir $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\BattleInfoPluginData\kcs\resources\swf\map
+move $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\*.dll $(SolutionDir)Grabacr07.KanColleViewer\bin\$(ConfigurationName)\lib</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

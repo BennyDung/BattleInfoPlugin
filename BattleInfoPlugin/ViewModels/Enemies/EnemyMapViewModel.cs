@@ -75,7 +75,7 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         private int GetCellColorNo(int idInEachMapInfo)
         {
-            var data = this.CellDatas.SingleOrDefault(x => x.No == idInEachMapInfo);
+            var data = this.CellDatas.FirstOrDefault(x => x.No == idInEachMapInfo);
             if (data != default(MapCellData)) return data.EventId;
             return Master.Current.MapCells
                 .Select(c => c.Value)

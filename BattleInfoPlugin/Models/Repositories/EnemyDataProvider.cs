@@ -132,7 +132,7 @@ namespace BattleInfoPlugin.Models.Repositories
         public Dictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> GetMapEnemies()
         {
             this.Reload();
-            return this.MapEnemyData.ToDictionary(
+            return this.MapEnemyData.Where(info => Master.Current.MapInfos.ContainsKey(info.Key)).ToDictionary(
                 info => Master.Current.MapInfos[info.Key],
                 info => info.Value.ToDictionary(
                     cell => Master.Current.MapCells
@@ -161,7 +161,8 @@ namespace BattleInfoPlugin.Models.Repositories
 
         private string GetEnemyNameFromId(string enemyId)
         {
-            return this.EnemyNames.ContainsKey(enemyId)
+            return this.EnemyNames != null &&
+                this.EnemyNames.ContainsKey(enemyId)
                 ? this.EnemyNames[enemyId]
                 : "";
         }

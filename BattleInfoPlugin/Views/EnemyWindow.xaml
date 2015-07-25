@@ -14,7 +14,7 @@
                    xmlns:enemies="clr-namespace:BattleInfoPlugin.ViewModels.Enemies"
                    xmlns:behaviors="clr-namespace:BattleInfoPlugin.Views.Behaviors"
                    mc:Ignorable="d" 
-                   Title="既知の敵一覧"
+                   Title="已知敌舰一览"
                    Width="1000"
                    Height="900"
                    FontSize="12"
@@ -94,7 +94,7 @@
                                   BandVisibility="Collapsed" />
 
                 <TextBlock Grid.Column="1"
-                           Text="既知の敵一覧"
+                           Text="已知敌舰一览"
                            Style="{DynamicResource CaptionTextStyleKey}"
                            Margin="2,0,8,0" />
 
@@ -196,12 +196,12 @@
                             </Style>
                         </StackPanel.Resources>
                         <TextBlock>
-                            <Run Text="エリア "/>
+                            <Run Text="海域 "/>
                             <Run Text="{Binding /Info.MapArea.Name, Mode=OneTime}"
                                  Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                         </TextBlock>
                         <TextBlock>
-                            <Run Text="マップ "/>
+                            <Run Text="地图 "/>
                             <Run Text="{Binding /Name, Mode=OneTime}"
                                  Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                         </TextBlock>
@@ -251,9 +251,9 @@
                         <TextBlock Text="Map Data Not Found"
                                    FontSize="20"
                                    HorizontalAlignment="Center"/>
-                        <TextBlock Text="・ローカルに保存されたマップデータが表示されます"
+                        <TextBlock Text="・此处会展示出击过的地图数据"
                                    Style="{DynamicResource DefaultTextStyleKey}"/>
-                        <TextBlock Text="・マップデータはブラウザキャッシュがない状態で出撃した際に保存されます"
+                        <TextBlock Text="・地图数据会在未缓存地图时出击后自动保存"
                                    Style="{DynamicResource DefaultTextStyleKey}"/>
                     </StackPanel>
 
@@ -274,7 +274,7 @@
                         <TextBlock Text="Required Assembly Not Found"
                                    FontSize="20"
                                    HorizontalAlignment="Center"/>
-                        <TextBlock Text="・SwfFormat.dll か ICSharpCode.SharpZipLib.dll が見つかりません"
+                        <TextBlock Text="・未能加载 SwfFormat.dll 和 ICSharpCode.SharpZipLib.dll，请确认它们被放置于正确的位置"
                                    Style="{DynamicResource DefaultTextStyleKey}"/>
                     </StackPanel>
 
